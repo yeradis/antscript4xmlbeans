@@ -1,0 +1,67 @@
+﻿<!--
+Ant script for "automatic" XMLBeans JavaBeans-style generation using custom namespaces
+
+
+This script will loop a folder content and will compile every XML schemas to its Java types, using a JavaBeans-style
+Every XML Schema (XSD) need a .xsdconfig indicating to XMLBeans the namespace where this XSD will have its Java class definitions. 
+
+
+<xb:config xmlns:pol="http://www.tesipro.com" xmlns:xb="http://www.bea.com/2002/09/xbean/config">
+        <xb:namespace uri="##any">
+                <xb:package>com.all.your.package.path.whatever</xb:package>
+        </xb:namespace>
+</xb:config>
+
+In this way, using .xsdconfig, you will be able to put every schema on its own packages, avoiding problems with those XSD that define same nodes(objects) with diferent body, XSD that cause XMLBeans to fail when compiling.
+
+This ANT script is using:
+
+-ANT-CONTRIB
+-a folder for output called WORKING , this get erased before ever build
+-a folder for XML Schemas (XSD) called SCHEMAS, folder wich contains .xsd files and .xsdconfig files, .xsconfig files must have same name as the xsd will represent.
+-finnally will generate a .jar for every .xsd file.
+
+
+ -->
+<project name="Validation" default="build">
+        <property environment="env"/>
+        <target name="init">
+                <property name="xmlbeans.home" value="${env.XMLBEANS_HOME}"/>
+                <echo message="xmlbeans.home: ${xmlbeans.home}"/>
+                <!-- check for xbean.jar from binary distribution -->
+                <available property="xmlbeans.lib" value="${xmlbeans.home}/lib" file="${xmlbeans.home}/lib/xbean.jar"/>
+                <!-- check for xbean.jar compiled from source -->
+                <available property="xmlbeans.lib" value="${xmlbeans.home}/build/lib" file="${xmlbeans.home}/build/lib/xbean.jar"/>
+                <fail message="Set XMLBEANS_HOME in your environment." unless="xmlbeans.lib"/>
+                <echo message="xmlbeans.lib: ${xmlbeans.lib}"/>
+                <path id="xmlbeans.path">
+                        <fileset dir="${xmlbeans.lib}" includes="*.jar"/>
+                </path>
+                <taskdef name="xmlbean" classname="org.apache.xmlbeans.impl.tool.XMLBean" classpathref="xmlbeans.path"/>
+                <taskdef resource="net/sf/antcontrib/antlib.xml"/>                
+        </target>
+        <!-- ========================== clean ==== -->
+        <target name="clean">
+                <delete dir="WORKING"/>
+        </target>
+                
+        <target name="build" depends="clean,init">
+        <!-- ========================== loop using ant-contrib ==== -->
+        <for param="file">
+                        <fileset dir="schemas" includes="*.xsd"/>
+                        <sequential>
+                                <propertyregex property="filenameMinusExtension" override="yes" input="@{file}"  regexp=".*\\([^\\]+)\.xsd" replace="\1" />                                  
+                                        <echo>"**********************************************************"</echo>
+                                        <echo>"BEGIN Procesando: ${filenameMinusExtension}"</echo>
+                                        <echo></echo>                        
+                                        <echo></echo>                                                        
+                                        <echo>@{file}</echo>
+                                <xmlbean javasource="1.4" destfile="${filenameMinusExtension}.jar" classpathref="xmlbeans.path" srcgendir="WORKING/${filenameMinusExtension}_SRC" classgendir="WORKING/${filenameMinusExtension}_BUILD" debug="on">
+                                        <fileset dir="Schemas" includes="${filenameMinusExtension}.xsd"/>                                        
+                                        <fileset dir="Schemas" includes="${filenameMinusExtension}.xsdconfig"/>                                        
+                                </xmlbean>
+                                        <echo>"END Procesando: ${filenameMinusExtension}"</echo>
+                        </sequential>
+        </for> 
+        </target>
+</project>
