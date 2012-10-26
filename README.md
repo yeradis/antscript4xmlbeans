@@ -20,7 +20,10 @@ In other words, using a XSDCONFIG file i'm able to guide the naming of generated
 
 This ANT script is using:
 
--ANT-CONTRIB
--a folder for output called WORKING , this get erased before ever build
--a folder for XML Schemas (XSD) called SCHEMAS, folder wich contains .xsd files and .xsdconfig files, .xsconfig files must have same name as the xsd will represent.
--finnally will generate a .jar for every .xsd file.
+*ANT-CONTRIB
+
+*A folder for output called WORKING , this get erased before ever build
+
+*A folder for XSDs called SCHEMAS, folder wich contains .xsd files and .xsdconfig files, XSDCONFIG files must have same name as the xsd that will represent.
+
+*Finnally will generate a .jar for every .xsd file.
