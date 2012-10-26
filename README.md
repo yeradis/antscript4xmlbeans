@@ -4,7 +4,7 @@
 
 This script will loop a folder content and will compile every XMLSchema(XSD) to Java, using a JavaBeans-style.
 
-Every XMLSchema (XSD) need a XSDCONFIG file indicating to XMLBeans the namespace where this XSD will have its Java class definitions. 
+Every XSD need a XSDCONFIG file indicating to XMLBeans the namespace where this XSD will have its Java class definitions. 
 
 
     <xb:config xmlns:pol="http://www.whateveryouneed.com" xmlns:xb="http://www.bea.com/2002/09/xbean/config">
