@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 Ant script for "automatic" XMLBeans JavaBeans-style generation using custom namespaces
 
 
@@ -6,10 +6,10 @@ This script will loop a folder content and will compile every XML schemas to its
 Every XML Schema (XSD) need a .xsdconfig indicating to XMLBeans the namespace where this XSD will have its Java class definitions. 
 
 
-<xb:config xmlns:pol="http://www.tesipro.com" xmlns:xb="http://www.bea.com/2002/09/xbean/config">
-        <xb:namespace uri="##any">
-                <xb:package>com.all.your.package.path.whatever</xb:package>
-        </xb:namespace>
+<xb:config xmlns:pol="http://www.whateveryouneed.com" xmlns:xb="http://www.bea.com/2002/09/xbean/config">
+    <xb:namespace uri="##any">
+        <xb:package>com.whateveryouneed.package.path.whatever</xb:package>
+    </xb:namespace>
 </xb:config>
 
 In this way, using .xsdconfig, you will be able to put every schema on its own packages, avoiding problems with those XSD that define same nodes(objects) with diferent body, XSD that cause XMLBeans to fail when compiling.
